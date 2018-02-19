@@ -1,142 +1,148 @@
 // Шаблонный линейный двунаправленный список со вставкой элементов в начало
 #include <iostream>
+#include <assert.h>
 
 using namespace std;
+
+//--------------Elem------------------------------
+template <typename T>
+class Elem{
+public:
+    T info;
+    Elem*next;
+    Elem*prev;
+};
+//-----------------------------------------------
 
 
 //------------------List--------------------------
 template <typename T>
 class List
 {   
-    template <typename T1>
-    struct Elem{
-	    T1 info;
-        Elem* next;
-	    Elem* prev;
-
-        Elem(T1 value){
-            Elem* next = nullptr;
-	        Elem* prev = nullptr;
-            T1 info = value;
-            cout << "New node was created: " << info << endl;
-        }
-    };
-
-    Elem <T>* head; 
-    Elem <T>* end;
-    int size;
+    friend Elem<T>;
+    Elem<T> *head; 
+    Elem<T> *tail;
 
 public: 
     List(){
         head = nullptr;
-        end = nullptr;
-        size = 0;
+        tail = nullptr;
     }
     ~List(){
         remove_all();
     }
     bool is_empty();  
     size_t get_size();
-    bool set(T value, size_t index);
-    bool insert_head (T value);
-    bool insert_tail (T value);
-    bool remove_elem();
+    Elem<T> *init(T value);
+    Elem<T> *find(size_t index);
+    void set(T value, size_t index);
+    void insert_head (T value);
+    void insert_tail (T value);
+    void remove_elem();
     void remove_all();
     void print(); 
 };
 //------------------------------------------------
 
 
-//-----------------MAIN----------------------------
-int main(){
-    class List <int> list();
-    if (list.is_empty()) cout << "Empty!" <<endl;
-
-}
-//------------------------------------------------
-
-
-
 //--------------ListMethods------------------------
 template <typename T>
-bool class List <T>::is_empty() // 0 - not empty, 1 - empty 
+Elem<T> *List <T>::init(T value)
 {
-    return head;
+    Elem<T> *p = new Elem<T>; 
+    p->info = value;
+    p->next = nullptr;
+    p->prev = nullptr;
+    return p;
 }
 
 template <typename T>
-size_t class List <T>::get_size()
+bool List <T>::is_empty() 
 {
-    return size;
+   return !head;
 }
 
 template <typename T>
-bool class List <T>::set(T value, size_t index)
+size_t List <T>::get_size()
 {
-    // Iter i(head); 
-    // i.find(index);
-
+    size_t count = 0;
+    Elem<T> *tmp = head;
+    while(tmp){
+        tmp = tmp->next;
+        count++; 
+    }
+    return count;
 }
 
 template <typename T>
-bool class List <T>::insert_head (T value)
+Elem<T> *List <T>::find(size_t index)
 {
-    // Elem <T>* tmp = head;
-    // Elem <T>* newElem = new Elem(value);
-    // if ( is_empty () ){ 
-    //     newElem->next = tail;
-    //     newElem->prev = head;
-    //     head->next = newElem; 
-    //     return 0;    
-    // }    
+    Elem<T> *tmp = head;
+    int i = 0;
+    while (tmp){
+        if (index == i) return tmp;
+        tmp = tmp->next;
+        i++;
+    }
+    assert('index is not found');
+}
 
-    // if ( !is_empty() ){
-    //     newElem->next = head->next;  // elem that was the first
+template <typename T>
+void List <T>::set(T value, size_t index)
+{
+    if( index == 0 || is_empty()){
+        insert_head(value);
+    }
+    else if( index >= get_size() ){
+        insert_tail(value);
+    }
+    else {
+        Elem<T> *newElem = init(value);
+        Elem<T> *tmp = find(index);
+       
+        newElem->next = tmp->next;
+        newElem->prev = tmp;
+        tmp->next = newElem;
+    }
+    
+}
 
-    // }
-    // int len = get_size();
-    // if ( !(cur->prev) ){
-    //     newElem->next = cur;
-    //     head = newElem;
-    //     cur = newElem;
-    //     return 0;
-    // }
-    // Elem* tmp = cur->prev;
-    // newElem->next = cur->next;
-    // newElem->prev = cur->prev;       
-    // tmp->next = newElem;
-    // cur = newElem; 
-    // return 0;
+template <typename T>
+void List <T>::insert_head (T value)
+{
+    Elem<T> *newElem = init(value);
+    if ( is_empty() ){ 
+        head = newElem;
+    }    
+    else {
+        newElem->next = head->next;
+        newElem->prev = head;
+        head->next = newElem;
+    }
+    tail = newElem;
+
 }
 
 template <typename T> 
-bool class List <T>::insert_tail(T value) //0 - success, 1 - err
+void List<T>::insert_tail(T value) 
 {
-//     Elem <T>* newElem =  new Elem(value); // (?) is it equvailent : new Elem and creating new object of class Elem
-//     if ( is_empty () ){ // list is empty - so, adding the value to the begging
-//         head = newElem;
-//         cur = newElem; 
-//         return 0;    
-//     }
-//     newElem->next = cur->next;
-//     newElem->prev = cur;
-
-//     if ( cur->next )        
-//          cur->next->prev = newElem;
-
-//     cur->next = newElem;
-//     cur = newElem; 
-//    return 0;
+    if ( is_empty () ){ 
+        insert_head(value);   
+    }
+    else{
+        Elem<T> *newElem = init(value);
+        tail->next = newElem;
+    }
 }
 
 template <typename T> 
-bool class List <T>::remove_elem() //0 - success, 1 - err
+void List <T>::remove_elem() 
 {
-    // Elem <T>* tmp = head;
+    // Elem<T> *tmp = head;
     // if ( is_empty () ) return -1;
-    // Elem* next = cur++;
-    // Elem* prev = cur--;
-    // Elem* del = cur;
+    // Elem*next = cur++;
+    // Elem*prev = cur--;
+    // Elem*del = cur;
     // if ( prev ){
     //     prev->next = next;
     //     cur = prev;
@@ -154,27 +160,58 @@ bool class List <T>::remove_elem() //0 - success, 1 - err
 }
 
 template <typename T> 
-void class List <T>::remove_all()
+void List <T>::remove_all()
 {
-    // Elem <T>* tmp = head;
-    // while ( tmp ){
-    //     tmp->next = tmp->next->next;
-    //     tmp->next->prev = 
-    //     tmp->prev = nullptr;
-
+    // Elem<T> *tmp = head;
+    // if( is_empty() ){
+    //     while ( tmp ){
+    //         tmp = tmp->next;
+    //         delete head;
+    //         head = tail;
+    //     }
     // }
-
+    if( !is_empty() ){
+        while ( head ){
+            tail = head->next;
+            delete head;
+            head = tail;
+        }
+    }   
+    
 }
 
 template <typename T> 
-void class List <T>::print()
+void List <T>::print()
 {
-    Elem* p = head;
+    Elem <T> *tmp = head;
     cout << "[ ";
-    while( p ){
-        cout << p* << " ";
-        p++;
+    while(tmp){
+        cout << tmp->info << " ";
+        tmp = tmp->next;
     }
     cout << "]" << endl;
 }  
 //----------------------------------------------------
+
+
+//-----------------MAIN----------------------------
+int main(){
+    List <int> list;
+
+    list.insert_head(4);
+    cout << list.get_size() << endl;
+    list.print();
+    
+    list.insert_tail(55);
+    list.print();
+    list.set(8,1);
+    list.print();
+    list.remove_all();
+    list.print();    
+    list.insert_head(3);
+    list.insert_tail(55);
+    list.print();
+    
+}
+//------------------------------------------------
+
