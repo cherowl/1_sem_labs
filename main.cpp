@@ -1,8 +1,8 @@
 // Шаблонный линейный двунаправленный список со вставкой элементов в начало
 #include <iostream>
-#include <assert.h>
 
 using namespace std;
+
 
 //--------------Elem------------------------------
 template <typename T>
@@ -24,18 +24,14 @@ class List
     Elem<T> *tail;
 
 public: 
-    List(){
-        head = nullptr;
-        tail = nullptr;
-    }
-    ~List(){
-        remove_all();
-    }
+    List() { head = nullptr; tail = nullptr; }
+    ~List();
+    
     bool is_empty();  
     size_t get_size();
     Elem<T> *init(T value);
     Elem<T> *find(size_t index);
-    void set(T value, size_t index);
+    void insert(T value, size_t index);
     void insert_head (T value);
     void insert_tail (T value);
     void remove_elem();
@@ -84,11 +80,11 @@ Elem<T> *List <T>::find(size_t index)
         tmp = tmp->next;
         i++;
     }
-    assert('index is not found');
+    cerr << "find: the index was not found" << endl;
 }
 
 template <typename T>
-void List <T>::set(T value, size_t index)
+void List <T>::insert(T value, size_t index)
 {
     if( index == 0 || is_empty()){
         insert_head(value);
@@ -160,24 +156,15 @@ void List <T>::remove_elem()
 }
 
 template <typename T> 
-void List <T>::remove_all()
+List <T>::~List()
 {
-    // Elem<T> *tmp = head;
-    // if( is_empty() ){
-    //     while ( tmp ){
-    //         tmp = tmp->next;
-    //         delete head;
-    //         head = tail;
-    //     }
-    // }
     if( !is_empty() ){
         while ( head ){
             tail = head->next;
             delete head;
             head = tail;
         }
-    }   
-    
+    }     
 }
 
 template <typename T> 
@@ -197,20 +184,20 @@ void List <T>::print()
 //-----------------MAIN----------------------------
 int main(){
     List <int> list;
-
+    list.insert(8,100);
+    list.print();
     list.insert_head(4);
     cout << list.get_size() << endl;
-    list.print();
     
     list.insert_tail(55);
     list.print();
-    list.set(8,1);
     list.print();
-    list.remove_all();
     list.print();    
     list.insert_head(3);
     list.insert_tail(55);
+    list.~List();
     list.print();
+    
     
 }
 //------------------------------------------------
