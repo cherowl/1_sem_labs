@@ -31,11 +31,10 @@ public:
     size_t get_size();
     Elem<T> *init(T value);
     Elem<T> *find(size_t index);
-    void insert(T value, size_t index);
+    void insert_after(T value, size_t index);
     void insert_head (T value);
     void insert_tail (T value);
-    void remove_elem();
-    void remove_all();
+    void delete_elem(size_t index);
     void print(); 
 };
 //------------------------------------------------
@@ -81,10 +80,11 @@ Elem<T> *List <T>::find(size_t index)
         i++;
     }
     cerr << "find: the index was not found" << endl;
+    return nullptr;
 }
 
 template <typename T>
-void List <T>::insert(T value, size_t index)
+void List <T>::insert_after(T value, size_t index)
 {
     if( index == 0 || is_empty()){
         insert_head(value);
@@ -92,7 +92,7 @@ void List <T>::insert(T value, size_t index)
     else if( index >= get_size() ){
         insert_tail(value);
     }
-    else {
+    else if( index >=1 && index < get_size() ){ 
         Elem<T> *newElem = init(value);
         Elem<T> *tmp = find(index);
        
@@ -116,7 +116,6 @@ void List <T>::insert_head (T value)
         head->next = newElem;
     }
     tail = newElem;
-
 }
 
 template <typename T> 
@@ -128,31 +127,48 @@ void List<T>::insert_tail(T value)
     else{
         Elem<T> *newElem = init(value);
         tail->next = newElem;
+        tail = newElem;
     }
 }
 
 template <typename T> 
-void List <T>::remove_elem() 
+void List <T>::delete_elem(size_t index) 
 {
-    // Elem<T> *tmp = head;
-    // if ( is_empty () ) return -1;
-    // Elem*next = cur++;
-    // Elem*prev = cur--;
-    // Elem*del = cur;
-    // if ( prev ){
-    //     prev->next = next;
-    //     cur = prev;
+    Elem<T> *del = head;
+    // if ( !is_empty() ){
+    //     Elem<T> *del = find (index);
+    //     if (del){
+    //         if(index == 0){
+    //             if(get_size() == 1) head = tail;
+    //             else  {
+    //                 head = del->next;
+    //                 del->next->prev = nullptr;
+    //             }
+    //         }
+
+
+
+
+
+    //         else if(!del->prev){
+    //             head = del->next;
+    //         }
+    //         else if(!del->next){
+    //             del->prev->next = del->next;
+
+    //         //     del->prev;
+    //         //     tail = del->prev;
+    //         //     tail->prev = del->prev->prev;
+    //         //     tail->next = nullptr;
+    //         }
+    //         if(del->prev){
+    //             del->prev->next = del->next;
+    //             del->next->prev = del->prev;
+    //         }
+    //         delete del;
+    //     }
     // }
-    // else if ( !prev){
-    //     head = next;
-    //     cur = next;
-    // }
-    // if ( next ){
-    //     next->prev = prev;
-    //     cur = next;
-    // }
-    // free(del);
-    // return 0;
+    // else cout << "delete_elem : error!\n";
 }
 
 template <typename T> 
@@ -184,21 +200,20 @@ void List <T>::print()
 //-----------------MAIN----------------------------
 int main(){
     List <int> list;
-    list.insert(8,100);
+    for (int i = 0; i <= 5; i++){
+        list.insert_head(i);
+    }
     list.print();
-    list.insert_head(4);
-    cout << list.get_size() << endl;
-    
-    list.insert_tail(55);
-    list.print();
-    list.print();
+    list.insert_after(8,100);
     list.print();    
-    list.insert_head(3);
     list.insert_tail(55);
-    list.~List();
     list.print();
+    
+   // list.delete_elem(2);
+    list.print();    
     
     
 }
 //------------------------------------------------
 
+    
