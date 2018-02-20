@@ -29,6 +29,8 @@ public:
     
     bool is_empty();  
     size_t get_size();
+    T& get_head();
+    T& get_tail();    
     Elem<T> *init(T value);
     Elem<T> *find(size_t index);
     void insert_after(T value, size_t index);
@@ -70,6 +72,19 @@ size_t List <T>::get_size()
 }
 
 template <typename T>
+T& List <T>::get_head()
+{
+    return head->info;
+}
+
+template <typename T>
+T& List <T>::get_tail()
+{
+    return tail->info;
+}
+
+
+template <typename T>
 Elem<T> *List <T>::find(size_t index)
 {
     Elem<T> *tmp = head;
@@ -86,16 +101,16 @@ Elem<T> *List <T>::find(size_t index)
 template <typename T>
 void List <T>::insert_after(T value, size_t index)
 {
-    if( index == 0 || is_empty()){
+    index += 1;
+    if( is_empty()){
         insert_head(value);
     }
     else if( index >= get_size() ){
         insert_tail(value);
     }
-    else if( index >=1 && index < get_size() ){ 
+    else if( index < get_size() ){ 
         Elem<T> *newElem = init(value);
-        Elem<T> *tmp = find(index);
-       
+        Elem<T> *tmp = find(index-1);
         newElem->next = tmp->next;
         newElem->prev = tmp;
         tmp->next = newElem;
@@ -112,13 +127,13 @@ void List <T>::insert_head (T value)
         tail = newElem;
     }    
     else {
-        if( get_size() == 1)
+        head->prev = newElem;
         newElem->next = head;
-        // newElem->prev = head;
-        head->next = newElem;     
         head = newElem;
-        
-        // head->next = newElem;
+        // if( get_size() == 1){
+        //     tail->prev = newElem; 
+        //     newElem->next = tail;       
+        // }
     }
 }
 
@@ -130,8 +145,13 @@ void List<T>::insert_tail(T value)
     }
     else{
         Elem<T> *newElem = init(value);
+        newElem->prev = tail;
         tail->next = newElem;
         tail = newElem;
+        // if( get_size() == 1) { 
+        //     tail->prev = head; 
+        //     head->next = newElem;
+        // }
     }
 }
 
@@ -196,7 +216,9 @@ void List <T>::print()
         cout << tmp->info << " ";
         tmp = tmp->next;
     }
-    cout << "]" << endl;
+    cout << "]";
+    cout << "   head = " << get_head() << "   tail = " << get_tail() << endl;
+    
 }  
 //----------------------------------------------------
 
@@ -204,17 +226,23 @@ void List <T>::print()
 //-----------------MAIN----------------------------
 int main(){
     List <int> list;
-    for (int i = 0; i <= 5; i++){
-        list.insert_head(i);
+    for (int i = 0; i < 1; i++){
+        list.insert_head(i); // 543210 - head , 012345 - tail
     }
     list.print();
-    list.insert_after(8,100);
+    list.insert_tail(222); 
+    list.print();  
+    list.insert_after(8,1);
+    list.print();   
+    list.insert_after(299,299);
     list.print();    
-    list.insert_tail(55);
+    // list.insert_tail(55);
+    list.insert_after(2002, 0);    
     list.print();
+    list.insert_head(333);    
     
-   // list.delete_elem(2);
-    list.print();    
+    // list.delete_elem(2);
+    // list.print();    
     
     
 }
