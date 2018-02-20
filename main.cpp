@@ -109,13 +109,17 @@ void List <T>::insert_head (T value)
     Elem<T> *newElem = init(value);
     if ( is_empty() ){ 
         head = newElem;
+        tail = newElem;
     }    
     else {
-        newElem->next = head->next;
-        newElem->prev = head;
-        head->next = newElem;
+        if( get_size() == 1)
+        newElem->next = head;
+        // newElem->prev = head;
+        head->next = newElem;     
+        head = newElem;
+        
+        // head->next = newElem;
     }
-    tail = newElem;
 }
 
 template <typename T> 
