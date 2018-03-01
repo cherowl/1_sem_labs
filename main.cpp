@@ -9,12 +9,13 @@ template <typename T>
 class Elem{
 public:
     T info;
-    Elem*next;
-    Elem*prev;
-    Elem() : next(nullptr), prev(nullptr) {};
+    Elem* next;
+    Elem* prev;
+    Elem(T info = decltype(info)(0), Elem *next = nullptr, Elem *prev=nullptr) : info(info), next(next),prev(prev) {}
+    T& get_info(){ return info; }
+    const T& get_info() const { return info; }
 };
 //-----------------------------------------------
-
 
 //------------------List--------------------------
 template <typename T>
@@ -30,38 +31,108 @@ public:
     
     bool is_empty();  
     size_t get_size();
-    T& get_head();
+    Elem<T> * get_head();
     T& get_tail();    
-    Elem<T> *init(T value);
+    // Elem<T> *init(T value);
     Elem<T> *find(size_t index);
     void insert_after(T value, size_t index);
     void insert_head (T value);
     void insert_tail (T value);
     void delete_elem(size_t index);
     void print(); 
+    T operator [] (size_t index);
 };
+//------------------------------------------------
+
+
+//-------------------Iterator-------------------------
+template <typename T>
+class Iter{    
+    friend List<T>;                                                                                         
+    List<T> *p_list;     
+    size_t iter; 
+
+public:
+    Iter(List<T> *ptr) : p_list(ptr), iter(0) {};
+    T operator*();
+    List<T> *operator->();
+    void operator++(int);
+    void operator--(int);
+};
+//------------------------------------------------
+
+
+//-------------------IteratorMethods-------------------------
+template <typename T>
+T Iter<T>::operator*()  
+{ 
+    T val = p_list->find(iter)->get_info();
+    return val;  
+}   
+
+template <typename T>
+List<T> *Iter<T>::operator->() 
+{ 
+    return p_list;
+}
+
+template <typename T>
+void Iter<T>::operator++(int)
+{
+    if (p_list->is_empty() || p_list->get_size() == 1) {
+        cerr << "It isn't available to increment 0 or 1 object" << endl; return;
+    }
+    if (iter == p_list->get_size()-1){
+        cerr << "It isn't available to increment the latest element" << endl; return;
+    }
+    static Elem<T> *tmp = p_list->get_head();
+    tmp = tmp->next;
+    iter++;
+}
+
+template <typename T>
+void Iter<T>::operator--(int)
+{
+     if (p_list->is_empty() || p_list->get_size() == 1) {
+        cerr << "It isn't available to decrement 0 or 1 object" << endl; return;
+    }
+    if (iter == 0){
+        cerr << "It isn't available to decrement the first element" << endl; return;
+    }
+    static Elem<T> *tmp = p_list->get_head();
+    tmp = tmp->prev;
+    iter--;
+}
 //------------------------------------------------
 
 
 //--------------ListMethods------------------------
 template <typename T>
-Elem<T> *List <T>::init(T value)
+T List<T>::operator[] (size_t index)
 {
-    Elem<T> *p = new Elem<T>; 
-    p->info = value;
-    p->next = nullptr;
-    p->prev = nullptr;
-    return p;
+
+    T value = find(index)->get_info();
+    return value;
 }
 
+// template <typename T>
+// Elem<T> *List<T>::init(T value)
+// {
+//     Elem<T> *p = new Elem<T>; 
+//     p->info = value;
+//     p->next = nullptr;
+//     p->prev = nullptr;
+//     return p;
+// }
+
 template <typename T>
-bool List <T>::is_empty() 
+bool List<T>::is_empty() 
 {
    return !head;
 }
 
 template <typename T>
-size_t List <T>::get_size()
+size_t List<T>::get_size()
 {
     size_t count = 0;
     Elem<T> *tmp = head;
@@ -73,20 +144,20 @@ size_t List <T>::get_size()
 }
 
 template <typename T>
-T& List <T>::get_head()
+Elem<T> *List<T>::get_head()
 {
-    return head->info;
+    return head;
 }
 
 template <typename T>
-T& List <T>::get_tail()
+T& List<T>::get_tail()
 {
-    return tail->info;
+    return tail->get_info();
 }
 
 
 template <typename T>
-Elem<T> *List <T>::find(size_t index)
+Elem<T> *List<T>::find(size_t index)
 {
     Elem<T> *tmp = head;
     int i = 0;
@@ -95,12 +166,12 @@ Elem<T> *List <T>::find(size_t index)
         tmp = tmp->next;
         i++;
     }
-    cerr << "find: the index was not found" << endl;
+    cerr << "Error in find: the index was not found" << endl;
     exit(1); 
 }
 
 template <typename T>
-void List <T>::insert_after(T value, size_t index)
+void List<T>::insert_after(T value, size_t index)
 {
     index += 1;
     if( is_empty()){
@@ -110,19 +181,19 @@ void List <T>::insert_after(T value, size_t index)
         insert_tail(value);
     }
     else if( index < get_size() ){ 
-        Elem<T> *newElem = init(value);
-        Elem<T> *tmp = find(index-1)    ;
-        newElem->next = tmp->next;
-        newElem->prev = tmp;
+        Elem<T> *tmp = find(index-1);
+        Elem<T> *newElem = new Elem<T>(value, tmp->next, tmp);
+        // newElem->next = tmp->next;
+        // newElem->prev = tmp;
         tmp->next = newElem;
     }
     
 }
 
 template <typename T>
-void List <T>::insert_head (T value)
+void List<T>::insert_head (T value)
 {
-    Elem<T> *newElem = init(value);
+    Elem<T> *newElem = new Elem<T>(value);
     if ( is_empty() ){ 
         head = newElem;
         tail = newElem;
@@ -141,15 +212,15 @@ void List<T>::insert_tail(T value)
         insert_head(value);   
     }
     else{
-        Elem<T> *newElem = init(value);
-        newElem->prev = tail;
+        Elem<T> *newElem = new Elem<T>(value,nullptr,tail);
+        // newElem->prev = tail;
         tail->next = newElem;
         tail = newElem;
     }
 }
 
 template <typename T> 
-void List <T>::delete_elem(size_t index) 
+void List<T>::delete_elem(size_t index) 
 {
     Elem<T> *del = head;
     if ( !is_empty() ){
@@ -190,7 +261,7 @@ void List <T>::delete_elem(size_t index)
 }
 
 template <typename T> 
-List <T>::~List()
+List<T>::~List()
 { 
     cout << "Destructor was called\n";
     if( !is_empty() ){
@@ -204,7 +275,7 @@ List <T>::~List()
 }
 
 template <typename T> 
-void List <T>::print()
+void List<T>::print()
 {
     if(is_empty()) {cout << "The list is empty" << endl; return;}
     Elem <T> *tmp = head;
@@ -213,9 +284,8 @@ void List <T>::print()
         cout << tmp->info << " ";
         tmp = tmp->next;
     }
-    cout << "]";
-    cout << "   head = " << get_head() << "   tail = " << get_tail() << endl;
-    
+    cout << "]"<<endl;
+    // cout << "   head = " << get_head() << "   tail = " << get_tail() << endl;
 }  
 //----------------------------------------------------
 
@@ -239,9 +309,21 @@ int main(){
     list.print();        
     list.delete_elem(2);   
     list.print(); 
+
+    cout<< list[0] <<endl;
+
+    // for( List<int> &elem : list){
+    //     elem++;
+    // }
+
     
-           
-    
+    // int i;
+    // Iter<int> iter(&list);
+    // for (i = 0; i<3; i++){
+    //     // iter++;
+    //     cout << iter[i] << endl;
+    // }
+
     
 }
 //------------------------------------------------

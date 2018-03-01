@@ -1,0 +1,7 @@
+example*.*
+*.o
+out
+serg.cpp
+sofia.cpp
+questions
+task_1
