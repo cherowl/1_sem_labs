@@ -1,0 +1,4 @@
+- if the reference is emty what should I return? (not nullptr) --> field: get_ob()
+- makefile increment
+- draw w, b
+- list.insert_tail(new Warrior(tmp, in)) --> rvalue: can be fix without changing (T &value) in the list?

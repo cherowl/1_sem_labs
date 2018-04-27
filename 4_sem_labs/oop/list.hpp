@@ -1,13 +1,13 @@
-#ifndef LIST_HPP
-#define LIST_HPP
+#ifndef LIST
+#define LIST
 #include <iostream>
-// #include <cstdlib>
-#include "iter.hpp"
+// #include "iter.hpp"
 
 using namespace std;
 
 template <typename T> class List;
 template <typename T> class Iter;
+class Object;
 
 //--------------Elem------------------------------
 template <typename T>
@@ -21,17 +21,40 @@ class Elem
     Elem* prev;
 
 public:
-    Elem(T info = decltype(info)(0), Elem *n = nullptr, Elem *p = nullptr) : info(info), next(n),prev(p) {}
-    T& get(){ return info; } // getter and setter too because of &
-    const T& get() const { return info; } 
+    Elem(T& info_ = T(0), Elem *n = nullptr, Elem *p = nullptr) 
+                : info(info_), next(n),prev(p) {}
+
+    ~Elem(){
+        delete info; 
+        // cout<<"~Elem\n";
+    }
+
+    T& get(); 
+    const T& get() const; 
+    Elem<T> &operator= ( T const &equal);
 };
+//-----------------------------------------------
+
+//--------------ElemMethods------------------------------
+template <typename T>
+T& Elem<T>::get()
+    { return info; } 
+
+template <typename T>
+const T& Elem<T>::get() const
+    { return info; }
+
+template <typename T>
+Elem<T> &Elem<T>::operator= (T const &equal){
+    get() = equal;
+    return *this;
+}
 //-----------------------------------------------
 
 //------------------List--------------------------
 template <typename T>
 class List
 {   
-    // friend class Elem<T>;
     friend class Iter<T>;
 
     Elem<T> *head; 
@@ -42,16 +65,16 @@ public:
     ~List();
     
     bool is_empty();  
-    void insert_after(T value, size_t index);
-    void insert_head (T value);
-    void insert_tail (T value);
+    void insert_after(const T& value, size_t index);
+    void insert_head (T& value);
+    void insert_tail (T& value);
     void print(); 
     void delete_elem(size_t index);
     size_t get_size();
     Elem<T> *find(size_t index);
 
     T operator [] (size_t index);
-    List<T> &operator= (const List<T>  &r);
+    List<T> &operator= (const List<T>  &equal);
 
     Elem<T> *get_head() { return head; }
     Elem<T> *get_tail() { return tail; }
@@ -66,17 +89,16 @@ public:
 template <typename T>
 T List<T>::operator[] (size_t index)
 {
-
     T value = find(index)->get();
     return value;
 }
 
 template <typename T>
-List<T> &List<T>::operator= (const List<T>  &r)
+List<T> &List<T>::operator= (const List<T>  &equal)
 {
-    if(&r == this)
+    if(&equal == this)
         return *this;
-    return this->head.get() = r->head.get() ;
+    return this->head.get() = equal->head.get() ;
 }
 
 template <typename T>
@@ -100,41 +122,26 @@ size_t List<T>::get_size()
 template <typename T>
 Elem<T> *List<T>::find(size_t index)
 {
+    if(this->is_empty()) {
+        cerr << "Error in find: empty list!" << endl;
+        // exit(1); 
+    }
     Elem<T> *tmp = head;
     int i = 0;
     while (tmp){
-        if (index == i) return tmp;
+        if (index == i) 
+            return tmp;
         tmp = tmp->next;
         i++;
     }
-    cerr << "Error in find: the index was not found" << endl;
-    exit(1); 
+    cerr << "Error in find: the index was not found!" << endl;
+    // exit(1); 
 }
 
 template <typename T>
-void List<T>::insert_after(T value, size_t index)
+void List<T>::insert_head(T& value)
 {
-    index += 1;
-    if( is_empty()){
-        insert_head(value);
-    }
-    else if( index >= get_size() ){
-        insert_tail(value);
-    }
-    else if( index < get_size() ){ 
-        Elem<T> *tmp = find(index-1);
-        Elem<T> *newElem = new Elem<T>(value, tmp->next, tmp);
-        // newElem->next = tmp->next;
-        // newElem->prev = tmp;
-        tmp->next = newElem;
-    }
-    
-}
-
-template <typename T>
-void List<T>::insert_head (T value)
-{
-    Elem<T> *newElem = new Elem<T>(value);
+    Elem<T>* newElem = new Elem<T>(value);
     if ( is_empty() ){ 
         head = newElem;
         tail = newElem;
@@ -146,15 +153,32 @@ void List<T>::insert_head (T value)
     }
 }
 
-template <typename T> 
-void List<T>::insert_tail(T value) 
+template <typename T>
+void List<T>::insert_after(const T& value, size_t index)
 {
-    if ( is_empty () ){ 
+    index += 1;
+    if( is_empty()){
+        insert_head(value);
+    }
+    else if( index >= get_size() ){
+        insert_tail(value);
+    }
+    else if( index < get_size() ){ 
+        Elem<T> *tmp = find(index-1);
+        Elem<T>* newElem = new Elem<T>(value, tmp->next, tmp);
+        tmp->next = newElem;
+    }
+    
+}
+
+template <typename T> 
+void List<T>::insert_tail(T& value) 
+{
+    if ( is_empty() ){ 
         insert_head(value);   
     }
     else{
-        Elem<T> *newElem = new Elem<T>(value,nullptr,tail);
-        // newElem->prev = tail;
+        Elem<T>* newElem = new Elem<T>(value,nullptr,tail); 
         tail->next = newElem;
         tail = newElem;
     }
@@ -198,13 +222,13 @@ void List<T>::delete_elem(size_t index)
         tail->next = nullptr;
         delete del;
     }
-    else {cerr << "delete_elem: The list is empty\n"; exit(1);}
+    else {cerr << " The list is empty (delete_elem)\n"; exit(1);}
 }
 
 template <typename T> 
 List<T>::~List()
 { 
-    cout << "Destructor was called\n";
+    // cout << "\nDestructor of the list was called\n";
     if( !is_empty() ){
         while ( head ){
             tail = head->next;
@@ -212,13 +236,13 @@ List<T>::~List()
             head = tail;
         }
     }    
-    else { cerr << "destructor : The list is already empty" << endl; exit(1); }
+    // else { cerr << "Destructor of list: already empty" << endl; }
 }
 
 template <typename T> 
 void List<T>::print()
 {
-    if(is_empty()) {cout << "The list is empty" << endl; return;}
+    if(is_empty()) {cout << "The list is empty (print)" << endl; return;}
     Elem <T> *tmp = head;
     cout << "[ ";
     while(tmp){
@@ -226,8 +250,7 @@ void List<T>::print()
         tmp = tmp->next;
     }
     cout << "]"<<endl;
-    // cout << "   head = " << get_head()() << "   tail = " << get_tail() << endl;
 }  
 //----------------------------------------------------
 
-#endif //LIST_HPP
+#endif //LIST
