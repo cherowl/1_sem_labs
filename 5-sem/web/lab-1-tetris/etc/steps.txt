@@ -1,0 +1,21 @@
+# Генерация открытого и закрытого ключей 
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout study.key -out study.csr
+
+# config
+/etc/nginx/sites-available/default
+
+# launch in the root dir of the project
+sudo apt install npm && npm install -g typescript
+
+
+# move your site to localhost:
+1. /etc/nginx/nginx.conf (server_name)
+2. /etc/nginx/sites-available/default (root dir, server name, index.html)
+3. sudo ln -s /etc/nginx/sites-available/mysite /etc/nginx/sites-enabled/ (edit mysite)
+4. sudo nginx -s reload
+
+
+sudo code /etc/nginx/nginx.conf --user-data-dir
+
+sudo ln -s /etc/nginx/sites-available/mysite /etc/nginx/sites-enabled/
+

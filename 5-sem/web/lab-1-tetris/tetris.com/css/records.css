@@ -1,0 +1,86 @@
+body {
+    position: absolute;
+    left: 30%;
+    top: 15%;
+    text-align: center;
+
+    background: url(wallpaper.jpg) no-repeat;
+    background-size: 100%;
+    background-size:cover;
+	max-width: auto;
+	height: 100%;
+
+}
+
+table {
+    font-family: Geneva, Arial, Helvetica;
+    font-size: 14px;
+    min-width: 500px;
+    text-align: center;
+    border: 2px solid #fbfcfb;
+    padding: 10px;
+    border-radius:50px;
+    margin: 0 auto; /* Выравниваем слой по центру */
+    width: 80%; /* Ширина слоя */
+    opacity: 0.7; /* Значение прозрачности */
+}
+
+th {
+    padding: 10px 10px;
+    background: lightgoldenrodyellow;
+    border-radius:50px;
+}
+
+table td:first-child{
+    max-width: 400px;
+    word-wrap:break-word;
+    border-radius:50px;
+    
+}
+
+td {
+    padding: 8px;
+    background: #f2acac;
+    border-radius:50px;
+    
+
+}
+
+#title{
+    position: absolute;
+    top: -15%;
+    left: 39%;
+    color: white;
+    font-size: 40px;
+    text-shadow: 1px 1px 2px #2936a8, 0 0 1em #f7f7fa;  
+}
+
+
+#back{
+    position: absolute;
+    top: 22%;
+    left: -30%;
+    float: left;
+    width: 100px;
+    height: 50px;
+    font-size: 16px;
+    margin-bottom: 30px;
+    border: solid 2px #f7faf7;
+    border-radius: 50px;
+    background: #CCC;
+    opacity: 0.6;
+}
+
+#main{
+    position: absolute;
+    top: 22%;
+    left: 110%;
+    width: 100px;
+    height: 50px;
+    font-size: 16px;
+    margin-bottom: 30px;
+    border: solid 2px #ffffff;
+    border-radius:50px;
+    background: #CCC;
+    opacity: 0.6;
+}
