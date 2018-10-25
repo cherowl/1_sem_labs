@@ -1,0 +1,73 @@
+/*
+# - id	
+. - class	
+nothing - teg
+*/
+
+body{
+	background: url(wallpaper.jpg) no-repeat;
+	background-size:cover;
+	max-width: auto;
+	height: 100%;
+}
+
+#bt{
+	position: absolute;
+	left: 20%;
+}
+
+h1{
+	text-align: center;
+}
+
+#what_name{
+	font-size: 60px;
+	position: absolute;
+	left: 13%;
+	top: 10%;
+	margin-top: 5.5%;
+	margin-bottom: 5%;
+	color: #ffffff;
+	text-shadow: 1px 1px 2px #0d1349, 0 0 1em #f7f7fa;  
+} 
+
+#button {
+	position: absolute;
+    top: 43%;
+    left: 13%;
+	background-color:  #e3eaee;
+	border: 20px solid  #faf8f867;
+    color: rgb(99, 100, 100);
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+	border-radius:10px;
+    font-size: 18px;
+	margin-top: 2%;
+	box-shadow: 10px 10px 20px #3b3b3b6c; /* Параметры тени */
+	background: #ffffff;
+    opacity: 0.9;
+}
+
+#name {
+	color:rgb(99, 100, 100);
+	position: absolute;
+    top: 32%;
+    left: 13%;
+	text-align: center;
+	border: 2px solid #ffffff;
+    border-radius: 8px;
+	padding: 10px 32px;
+	background-color: #e3eaee;
+	box-sizing: border-box;
+	font-size: 20px;
+	margin-top: 2%;
+	box-shadow: 10px 10px 20px #3b3b3b6c; /* Параметры тени */
+	background: #ffffff;
+    opacity: 0.9;
+}
+
+
+

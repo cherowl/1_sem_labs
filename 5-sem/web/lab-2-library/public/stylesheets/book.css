@@ -1,0 +1,25 @@
+#booktable{
+    width:50%;
+    float:left;
+    width:900px;
+    opacity: 0.8;
+}
+
+#divbookbutts{
+    position:absolute;
+    left: 970px;
+    width:220px;
+    opacity: 0.8;
+}
+#save{
+    width:220px;
+    margin-bottom:10px;
+}
+#bookinstock, #bookoutstock{
+    width:220px;
+}
+
+#returnbutt{
+    width:220px;
+    margin-top:10px;
+}

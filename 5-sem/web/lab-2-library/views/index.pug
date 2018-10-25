@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  link(rel='stylesheet', href='/stylesheets/w3.css')
+  link(rel='stylesheet', href='/stylesheets/style.css')
+  h1(class="w3-text-white")= title
+  button(class="w3-btn w3-light-grey w3-xlarge w3-text-blue-grey w3-round-large ", onclick=`window.location = "http://localhost:3000/library";`, id='bt') Go there

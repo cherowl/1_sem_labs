@@ -1,0 +1,51 @@
+extends layout
+
+block content
+    script(src="/javascripts/library.js")
+    link(rel='stylesheet', href='/stylesheets/w3.css')
+    link(rel='stylesheet', href='/stylesheets/library.css')
+    table(class="w3-table-all w3-hoverable w3-card-4 w3-centered w3-border w3-round-xlarge w3-large", id="tablebooks")
+        tr(class="w3-light-grey ")
+            th Index
+            th Author
+            th Book name
+            th Created year
+            th Returning date
+            th Delete
+        - for(var i = 0; i < books.length; i++) {
+            - var redirect=`window.location.href='http://localhost:3000/library/${books[i].ind}'`;
+            tr
+                td(onclick=redirect)= books[i].ind + 1
+                td(onclick=redirect)= books[i].author
+                td(onclick=redirect)= books[i].name
+                td(onclick=redirect)= books[i].created
+                td(onclick=redirect)= books[i].datereturn
+                td(onclick=redirect, style="display:none")= books[i].stock
+                td(onclick=redirect, style="display:none")= books[i].taken.date
+                td
+                    button(onclick=`deletebook(${i});` ) X
+        -}
+    button(class="w3-btn w3-light-grey w3-large", 
+                onclick='document.getElementById("addbookform").style.display="block";',id="addbutt") Add book
+    div(id="filtrdiv", class="w3-light-grey w3-large")
+        p(id="pfilt") Filter
+        div
+            label Available
+            input(type="checkbox", id="filt_stock", onclick="filter_stock();",)
+        p
+        div
+            label Overdue
+            input(type="checkbox", id="filt_lost", onclick="filter_lost();" )
+    div(id="addbookform",class="w3-modal")
+        div(class="w3-modal-content w3-card-4")
+            div(class="w3-container")
+                div(class="w3-section")
+                    span(onclick="document.getElementById('addbookform').style.display='none'" class="w3-button w3-display-topright") &times;
+                    label Author
+                    input(class="w3-input w3-corder 3-margin-bottom",name="name", id="addname", onkeyup='checkfields();')
+                    label Book name
+                    input(class="w3-input w3-corder 3-margin-bottom",name="author", id="addauth", onkeyup='checkfields();')
+                    label Created year
+                    input(class="w3-input w3-corder 3-margin-bottom",name="release",type="number", id="adddatarel", onkeyup='checkfields();')
+                    button(class="w3-button w3-block w3-light-blue w3-section w3-padding",
+                        onclick='addbook();', id="btn",disabled=true) Ok

@@ -1,0 +1,38 @@
+#tablebooks{
+    width:50%;
+    float:left;
+    width:900px;
+    opacity: 0.8;
+    border: solid 1px #ffffff59;
+    /* border-radius: 10px; */
+
+}
+#addbutt{   
+    position:absolute;
+    left: 970px;
+    width:220px;
+    font-size:15pt;
+    box-shadow: 5px 5px 20px #3b3b3b6c; /* Параметры тени */
+    /* border-radius: 10px; */
+    border: solid 1px #ffffff59;
+    opacity: 0.8;
+}
+#filtrdiv{
+    position:absolute;
+    margin-top:55px;
+    left: 970px;
+    border: solid 1px #ffffff1e;
+    box-shadow: 5px 5px 20px #3b3b3b6c; /* Параметры тени */
+    padding:10px;
+    /* font-size: */
+    /* border-radius:10px; */
+    width:220px;
+    opacity: 0.8;
+}
+#pfilt{
+    text-align:center;
+    font-size:15pt;
+}
+#filt_stock,#filt_lost{
+    float:right;
+}

@@ -1,0 +1,36 @@
+{
+    "0": {
+        "name": " Robinson Crusoe",
+        "author": "Daniel Defoe",
+        "created": "1719",
+        "datereturn": "25.10.2018",
+        "stock": true,
+        "taken": {
+            "till": "2018-10-16",
+            "whom": "",
+            "date": ""
+        }
+    },
+    "1": {
+        "name": "Gulliver’s Travels",
+        "author": "Jonathan Swift",
+        "created": "1726",
+        "datereturn": "25.10.2018",
+        "stock": true,
+        "taken": {
+            "date": "",
+            "whom": ""
+        }
+    },
+    "2": {
+        "name": "Gone with the Wind",
+        "author": "Margaret Mitchell",
+        "created": "1936",
+        "datereturn": "25.10.2018",
+        "stock": true,
+        "taken": {
+            "date": "",
+            "whom": ""
+        }
+    }
+}

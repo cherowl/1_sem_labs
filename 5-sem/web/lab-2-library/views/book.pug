@@ -1,0 +1,58 @@
+extends layout
+
+block content
+    script(src="/javascripts/book.js")
+    link(rel='stylesheet', href='/stylesheets/w3.css')
+    link(rel='stylesheet', href='/stylesheets/book.css')
+    table(class="w3-table-all w3-hoverable w3-card-4 w3-bordered w3-large", id="booktable")
+        tr
+            th Book name
+            td
+                input(type="text", value=name, id="oldname",onkeyup='checkfieldschange();')
+        tr
+            th Author
+            td
+                input(type="text", value=author, id="oldauth",onkeyup='checkfieldschange();')
+
+        tr
+            th Created year
+            td
+                input(type="number", value=created, id="olddata",onkeyup='checkfieldschange();')
+        tr
+            th Available
+            - if (stock) {
+            td Yes
+            - } else {
+            td No   
+            - }
+        - if (!stock) {
+        tr
+            th Time to be returned
+            td(id="date_returned")= taken_date
+        tr
+            th Owned by
+            td(id="name_returned")= taken_whom
+        - }
+    div(id="divbookbutts")
+        button(class="w3-btn w3-white w3-border w3-border-grey w3-large", id="save",
+            onclick='savechanges();') Save changes
+        - if (stock) {
+        button(class="w3-btn w3-white w3-border w3-border-grey w3-large", id="bookinstock"
+            onclick="document.getElementById('givebookform').style.display='block'") Give book
+        - } else {
+        button(class="w3-btn w3-white w3-border w3-border-grey w3-large", id="bookoutstock"
+            onclick='returnbook();') Return book
+        - }
+        button(class="w3-btn w3-white w3-border w3-border-grey w3-large", id="returnbutt"
+            onclick='window.location.href="http://localhost:3000/library"') Return library
+    div(id="givebookform",class="w3-modal")
+        div(class="w3-modal-content")
+            div(class="w3-container")
+                div(class="w3-section")
+                    span(onclick="document.getElementById('givebookform').style.display='none'" class="w3-button w3-display-topright") &times;
+                    label Whom
+                    input(id="takename", onkeyup='checkfieldsgive();',class="w3-input w3-corder 3-margin-bottom")
+                    label Tо
+                    input(id="takedata",type="date", onmousemove  ='checkfieldsgive();',class="w3-input w3-corder 3-margin-bottom")
+                    button(class="w3-button w3-block w3-light-blue w3-section w3-padding",
+                        onclick="givebook();", id="btn",disabled=true) Ok

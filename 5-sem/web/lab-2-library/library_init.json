@@ -1,0 +1,13 @@
+{
+    "0": {
+        "name": " Robinson Crusoe",
+        "author": "Daniel Defoe",
+        "created": "1719",
+        "datereturn": "-",
+        "stock": true,
+        "taken": {
+            "till": "2018-10-16",
+            "whom": "Helen"
+        }
+    }
+}
