@@ -12,7 +12,7 @@ for (key in books) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Welcome to your library' });
+  res.render('index', { title: 'Welcome to the library' });
 });
 
 router.get('/library', function(req, res) {
